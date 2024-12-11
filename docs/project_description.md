@@ -20,7 +20,7 @@ The application provides comprehensive inventory management capabilities with th
 - **UI Framework**: JavaFX
 - **Database**: MariaDB
 - **Build Tool**: Gradle
-- **Spring Framework**: Spring Boot 3.3.3 for dependency injection and data access
+- **Spring Framework**: Spring Boot 3.4.0 for dependency injection and data access
 - **Additional Libraries**: 
     - Hibernate ORM for database operations
     - ModelMapper for object mapping
