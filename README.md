@@ -1,6 +1,6 @@
 # Glass Inventory Management System
 
-A modern, lightweight inventory management application designed specifically for glass warehouses. This application simplifies the process of tracking and managing glass sheets and packs, allowing for quick adjustments and an intuitive user experience. Built with cutting-edge technology, the system is tailored for single-warehouse operations with future extensibility in mind.
+A modern, lightweight inventory management application designed specifically for glass warehouses. This application simplifies the process of tracking and managing glass sheets and packs, allowing for quick adjustments and an intuitive user experience. The system is created for single-warehouse operations with future extensibility in mind.
 
 ---
 
