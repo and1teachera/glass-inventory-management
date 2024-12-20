@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.zlatenov.glasswarehouse.controller.MainViewController"
+            fx:id="mainContainer"
+           >
+
+<top>
+    <HBox spacing="10" alignment="CENTER" >
+    </HBox>
+  </top>
+  <center>
+    <StackPane VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS"/>
+  </center>
+</BorderPane>
