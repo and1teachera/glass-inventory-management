@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.4.0'
 	id 'io.spring.dependency-management' version '1.1.6'
+	id 'org.openjfx.javafxplugin' version '0.0.8'
 }
 
 group = 'com.zlatenov'
@@ -12,6 +13,11 @@ java {
 		languageVersion = JavaLanguageVersion.of(21)
 	}
 }
+javafx {
+	version = "20"
+	modules = [ 'javafx.controls', 'javafx.fxml' ]
+}
+
 
 configurations {
 	compileOnly {
@@ -26,6 +32,9 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.openjfx:javafx-controls:24-ea+5'
+	implementation 'org.openjfx:javafx-fxml:24-ea+5'
+	implementation 'org.openjfx:javafx-graphics:24-ea+5'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
