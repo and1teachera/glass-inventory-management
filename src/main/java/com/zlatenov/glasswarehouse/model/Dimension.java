@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * Represents the dimensions of a glass product.
- * This class stores the width and height of a product variation.
+ * This class stores the width and height of a product specification.
  */
 @Data
 @NoArgsConstructor

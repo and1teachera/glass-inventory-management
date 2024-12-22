@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import java.util.Objects;
 
 /**
- * Represents the quantity of a product variation in the inventory.
+ * Represents the quantity of a product specification in the inventory.
  * This class tracks the number of packs, items per pack, and standalone items.
  */
 @Data
