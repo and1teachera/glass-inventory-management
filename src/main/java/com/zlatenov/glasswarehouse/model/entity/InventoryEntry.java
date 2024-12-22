@@ -13,8 +13,8 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 /**
- * Represents an inventory entry for a specific product variation in the warehouse.
- * This class tracks the quantity of a product variation and when it was last updated.
+ * Represents an inventory entry for a specific product specification in the warehouse.
+ * This class tracks the quantity of a product specification and when it was last updated.
  */
 @Data
 @NoArgsConstructor
@@ -25,8 +25,8 @@ public class InventoryEntry {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "product_variation_id", updatable = false)
-    private long productVariationId;
+    @Column(name = "product_specification_id", updatable = false)
+    private long productSpecificationId;
 
     @Embedded
     private Quantity quantity;
@@ -34,14 +34,14 @@ public class InventoryEntry {
     @Column(name = "last_updated", nullable = false)
     private LocalDateTime lastUpdated;
 
-    public InventoryEntry(Long productVariationId, Quantity quantity) {
-        this.productVariationId = productVariationId;
+    public InventoryEntry(Long productSpecificationId, Quantity quantity) {
+        this.productSpecificationId = productSpecificationId;
         this.quantity = quantity;
         this.lastUpdated = LocalDateTime.now();
     }
 
     /**
-     * Sets the Quantity of the product variation in inventory.
+     * Sets the Quantity of the product specification in inventory.
      *
      * @param quantity The Quantity to set
      */

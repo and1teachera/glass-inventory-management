@@ -5,7 +5,7 @@
     The system allows comprehensive management of glass products through the following capabilities:
 
     - **Dynamic Product Entry**: 
-        The application enables users to add new glass products by entering the product name, with support for complex product structures. Users can specify multiple attributes including thickness and glass type, with thickness being the default attribute. For each product variation, users can specify multiple dimensions and quantities.
+        The application enables users to add new glass products by entering the product name, with support for complex product structures. Users can specify multiple attributes including thickness and glass type, with thickness being the default attribute. For each product specification, users can specify multiple dimensions and quantities.
 
         Product entries support:
         - Basic product information (name, optional description)
@@ -18,23 +18,23 @@
         - Optional attributes like glassmaker and type
         - Dynamic addition of sections and dimensions
 
-    - **Product Variation Management**:
-        The system provides tools for managing product variations effectively:
-        - Creation of new variations based on existing products
-        - Modification of variation attributes and quantities
-        - Hierarchical organization of variations by attributes
+    - **Product Specification Management**:
+        The system provides tools for managing product specifications effectively:
+        - Creation of new specifications based on existing products
+        - Modification of specification attributes and quantities
+        - Hierarchical organization of specifications by attributes
 
     - **Product Editing**:
         Users can modify existing products with capabilities to:
         - Update product information
         - Modify sections and their attributes
         - Adjust dimensions and quantities
-        - Add or remove variations
+        - Add or remove specifications
 
     - **Product Deletion**:
         The system supports complete removal of products including:
         - Deletion of the main product record
-        - Removal of all associated variations
+        - Removal of all associated specifications
         - Cleanup of related inventory entries
         - Preservation of historical log entries
 
@@ -51,8 +51,8 @@
 
     - **Inventory Adjustments**:
         Users can modify inventory levels with:
-        - Quantity modifications per variation
-        - Multiple quantity entries per variation
+        - Quantity modifications per specification
+        - Multiple quantity entries per specification
         - Validation to prevent negative inventory
         - Reason logging for adjustments
 
@@ -70,7 +70,7 @@
     - **Operation Recording**:
         Each inventory operation is logged with:
         - Timestamp
-        - Product and variation details
+        - Product and specification details
         - Operation type (ADD/REMOVE/UPDATE)
         - Quantity changes
         - Associated reason

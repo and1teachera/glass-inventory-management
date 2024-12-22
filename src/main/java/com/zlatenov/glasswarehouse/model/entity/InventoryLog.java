@@ -36,7 +36,7 @@ public class InventoryLog {
     private OperationType operationType;
 
     @ManyToOne
-    @JoinColumn(name = "product_variation_id")
+    @JoinColumn(name = "product_specification_id")
     private ProductSpecification productSpecification;
 
     @Column(nullable = false)

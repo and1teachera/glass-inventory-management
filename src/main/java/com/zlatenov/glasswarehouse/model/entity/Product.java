@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * Represents a glass product in the inventory management system.
- * This class contains general information about a product and its variations.
+ * This class contains general information about a product and its specifications.
  */
 @Data
 @NoArgsConstructor

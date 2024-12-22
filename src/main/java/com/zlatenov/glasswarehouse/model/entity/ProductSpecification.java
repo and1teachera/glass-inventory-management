@@ -20,8 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Represents a specific variation of a glass product in the inventory management system.
- * This class contains detailed information about a product variation, including its
+ * Represents a specific specification of a glass product in the inventory management system.
+ * This class contains detailed information about a product specification, including its
  * attributes such as thickness, type, dimensions, and type.
  */
 @Data
@@ -51,7 +51,7 @@ public class ProductSpecification {
     private Dimension dimension;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    @JoinColumn(name = "product_variation_id")
+    @JoinColumn(name = "product_specification_id")
     private List<InventoryEntry> inventoryEntries = new ArrayList<>();
 
 }
