@@ -1,63 +1,66 @@
-name: Run Tests
+name: CI Gradle Tests with MariaDB
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
   pull_request:
-    branches: [ main ]
 
 jobs:
   test:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
 
-      - name: Set up JDK 21
+    services:
+      mariadb:
+        image: mariadb:10.6
+        env:
+          MARIADB_USER: ${{ secrets.DB_GLASS_INVENTORY_USERNAME }}
+          MARIADB_PASSWORD: ${{ secrets.DB_GLASS_INVENTORY_PASSWORD }}
+          MARIADB_DATABASE: glass_inventory_management
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
         uses: actions/setup-java@v3
         with:
-          java-version: '21'
           distribution: 'temurin'
-          cache: 'gradle'
+          java-version: '21'
 
-      - name: Setup Gradle
+      - name: Cache Gradle packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Set up Gradle
         uses: gradle/gradle-build-action@v2
 
-      - name: Set up MariaDB service
-        run: |
-          docker run --name mariadb-container -e MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }} -e MYSQL_DATABASE=glass_inventory_management -e MYSQL_USER=${{ secrets.DB_GLASS_INVENTORY_USERNAME }} -e MYSQL_PASSWORD=${{ secrets.DB_GLASS_INVENTORY_PASSWORD }} -p 3306:3306 -d mariadb:10.7
-
-      - name: Check MariaDB container logs
-        run: docker logs mariadb-container
-
-      - name: Wait for MariaDB to be ready
-        run: |
-          COUNTER=0
-          until docker exec mariadb-container mysqladmin --user=root --password=${{ secrets.MYSQL_ROOT_PASSWORD }} --host=localhost --port=3306 ping --silent; do
-            if [ $COUNTER -gt 30 ]; then
-              echo "MariaDB did not start in time."
-              exit 1
-            fi
-            echo "Waiting for MariaDB to be ready..."
-            sleep 5
-            COUNTER=$((COUNTER+1))
-          done
-
-      - name: Verify MariaDB database and user
-        run: |
-          docker exec mariadb-container mysql --user=root --password=${{ secrets.MYSQL_ROOT_PASSWORD }} -e "SHOW DATABASES;"
-          docker exec mariadb-container mysql --user=root --password=${{ secrets.MYSQL_ROOT_PASSWORD }} -e "SELECT User, Host FROM mysql.user;"
-
-      - name: Set environment variables
+      - name: Export Environment Variables
         run: |
           echo "DB_GLASS_INVENTORY_USERNAME=${{ secrets.DB_GLASS_INVENTORY_USERNAME }}" >> $GITHUB_ENV
           echo "DB_GLASS_INVENTORY_PASSWORD=${{ secrets.DB_GLASS_INVENTORY_PASSWORD }}" >> $GITHUB_ENV
 
-      - name: Run unit tests
-        run: ./gradlew test
+      - name: Wait for MariaDB
+        run: |
+          for i in {1..10}; do
+            if mysqladmin ping -h 127.0.0.1 --silent; then
+              echo "MariaDB is up!"
+              break
+            fi
+            echo "Waiting for MariaDB..."
+            sleep 5
+          done
 
-      - name: Upload test results
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: test-results
-          path: '**/build/reports/tests/'
+      - name: Run Gradle Tests
+        run: ./gradlew clean test
