@@ -24,14 +24,28 @@ jobs:
 
       - name: Set up MariaDB service
         run: |
-          docker run --name mariadb-container -e MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }} -e MYSQL_DATABASE=glass_inventory_management -e MYSQL_USER=${{ secrets.DB_GLASS_INVENTORY_USERNAME }} -e MYSQL_PASSWORD=${{ secrets.DB_GLASS_INVENTORY_PASSWORD }} -p 3306:3306 -d mariadb:latest
+          docker run --name mariadb-container -e MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }} -e MYSQL_DATABASE=glass_inventory_management -e MYSQL_USER=${{ secrets.DB_GLASS_INVENTORY_USERNAME }} -e MYSQL_PASSWORD=${{ secrets.DB_GLASS_INVENTORY_PASSWORD }} -p 3306:3306 -d mariadb:10.7
+
+      - name: Check MariaDB container logs
+        run: docker logs mariadb-container
 
       - name: Wait for MariaDB to be ready
         run: |
+          COUNTER=0
           until docker exec mariadb-container mysqladmin --user=root --password=${{ secrets.MYSQL_ROOT_PASSWORD }} --host=localhost --port=3306 ping --silent; do
+            if [ $COUNTER -gt 30 ]; then
+              echo "MariaDB did not start in time."
+              exit 1
+            fi
             echo "Waiting for MariaDB to be ready..."
             sleep 5
+            COUNTER=$((COUNTER+1))
           done
+
+      - name: Verify MariaDB database and user
+        run: |
+          docker exec mariadb-container mysql --user=root --password=${{ secrets.MYSQL_ROOT_PASSWORD }} -e "SHOW DATABASES;"
+          docker exec mariadb-container mysql --user=root --password=${{ secrets.MYSQL_ROOT_PASSWORD }} -e "SELECT User, Host FROM mysql.user;"
 
       - name: Set environment variables
         run: |
