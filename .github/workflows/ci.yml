@@ -23,14 +23,15 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
       - name: Set up MariaDB service
-        uses: docker://mariadb:latest
-        with:
-          ports: 3306:3306
-        env:
-          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
-          MYSQL_DATABASE: glass_inventory_management
-          MYSQL_USER: ${{ secrets.DB_GLASS_INVENTORY_USERNAME }}
-          MYSQL_PASSWORD: ${{ secrets.DB_GLASS_INVENTORY_PASSWORD }}
+        run: |
+          docker run --name mariadb-container -e MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }} -e MYSQL_DATABASE=glass_inventory_management -e MYSQL_USER=${{ secrets.DB_GLASS_INVENTORY_USERNAME }} -e MYSQL_PASSWORD=${{ secrets.DB_GLASS_INVENTORY_PASSWORD }} -p 3306:3306 -d mariadb:latest
+
+      - name: Wait for MariaDB to be ready
+        run: |
+          until docker exec mariadb-container mysqladmin --user=root --password=${{ secrets.MYSQL_ROOT_PASSWORD }} --host=localhost --port=3306 ping --silent; do
+            echo "Waiting for MariaDB to be ready..."
+            sleep 5
+          done
 
       - name: Set environment variables
         run: |
