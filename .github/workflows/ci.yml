@@ -17,6 +17,7 @@ jobs:
           MARIADB_USER: ${{ secrets.DB_GLASS_INVENTORY_USERNAME }}
           MARIADB_PASSWORD: ${{ secrets.DB_GLASS_INVENTORY_PASSWORD }}
           MARIADB_DATABASE: glass_inventory_management
+          MARIADB_ROOT_PASSWORD: ${{ secrets.MARIADB_ROOT_PASSWORD }}
         ports:
           - 3306:3306
         options: >-
