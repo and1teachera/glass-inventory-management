@@ -1,0 +1,67 @@
+name: CI Gradle Tests with MariaDB
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      mariadb:
+        image: mariadb:10.6
+        env:
+          MARIADB_USER: ${{ secrets.DB_GLASS_INVENTORY_USERNAME }}
+          MARIADB_PASSWORD: ${{ secrets.DB_GLASS_INVENTORY_PASSWORD }}
+          MARIADB_DATABASE: glass_inventory_management
+          MARIADB_ROOT_PASSWORD: ${{ secrets.MARIADB_ROOT_PASSWORD }}
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Set up Gradle
+        uses: gradle/gradle-build-action@v2
+
+      - name: Export Environment Variables
+        run: |
+          echo "DB_GLASS_INVENTORY_USERNAME=${{ secrets.DB_GLASS_INVENTORY_USERNAME }}" >> $GITHUB_ENV
+          echo "DB_GLASS_INVENTORY_PASSWORD=${{ secrets.DB_GLASS_INVENTORY_PASSWORD }}" >> $GITHUB_ENV
+
+      - name: Wait for MariaDB
+        run: |
+          for i in {1..10}; do
+            if mysqladmin ping -h 127.0.0.1 --silent; then
+              echo "MariaDB is up!"
+              break
+            fi
+            echo "Waiting for MariaDB..."
+            sleep 5
+          done
+
+      - name: Run Gradle Tests
+        run: ./gradlew clean test
