@@ -1,5 +1,8 @@
 # Glass Inventory Management System
 
+## CI/CD pipeline status
+[![Run Tests](https://github.com/and1teachera/glass-inventory-management/actions/workflows/ci.yml/badge.svg)](https://github.com/and1teachera/glass-inventory-management/actions/workflows/ci.yml)
+
 A modern, lightweight inventory management application designed specifically for glass warehouses. This application simplifies the process of tracking and managing glass sheets and packs, allowing for quick adjustments and an intuitive user experience. The system is created for single-warehouse operations with future extensibility in mind.
 
 ---
